@@ -231,6 +231,7 @@ body.no-scroll {
     align-items: center;
     padding: 1rem 1.5rem;
     border-bottom: 1px solid #eee;
+    flex-shrink: 0;
 }
 
 .cart-header h2 {
@@ -246,10 +247,18 @@ body.no-scroll {
     padding: 0.5rem;
 }
 
-.cart-content {
-    padding: 0 1.5rem 1.5rem 1.5rem;
-    overflow-y: auto;
+.cart-body {
     flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+}
+
+.cart-footer {
+    flex-shrink: 0;
+    padding: 1.5rem;
+    border-top: 2px solid #eee;
+    background-color: var(--card-bg);
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
 }
 
 .cart-empty-message {
@@ -285,9 +294,10 @@ body.no-scroll {
 .cart-item-quantity { margin: 0 0.5rem; font-weight: bold; }
 
 .cart-summary {
-    border-top: 2px solid #eee;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
+    border-top: none;
+    margin-top: 0;
+    padding-top: 0;
+    margin-bottom: 1.5rem;
 }
 
 .subtotal-line {
@@ -297,16 +307,10 @@ body.no-scroll {
     font-weight: bold;
 }
 
-/* --- Formulario --- */
 .customer-form {
-    margin-top: 1.5rem;
-    border-top: 2px solid #eee;
-    padding-top: 1.5rem;
-}
-
-.customer-form h3 {
-    font-family: var(--font-title);
-    margin-bottom: 1rem;
+    margin-top: 0;
+    border-top: none;
+    padding-top: 0;
 }
 
 .form-group { margin-bottom: 1rem; }
@@ -364,10 +368,34 @@ body.no-scroll {
         box-shadow: none;
         border-radius: 10px;
         padding: 1.5rem;
+        display: block;
     }
 
     .cart-sidebar.is-open { transform: none; }
     .cart-header { display: none; }
-    .cart-content { padding: 0; }
-    .cart-overlay { display: none; }
+
+    .cart-body {
+        flex-grow: 0;
+        overflow-y: visible;
+        padding: 0;
+    }
+
+    .cart-footer {
+        padding: 0;
+        border-top: none;
+        box-shadow: none;
+    }
+
+    .cart-summary {
+        border-top: 2px solid #eee;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        margin-bottom: 0;
+    }
+
+    .customer-form {
+        margin-top: 1.5rem;
+        border-top: 2px solid #eee;
+        padding-top: 1.5rem;
+    }
 }
