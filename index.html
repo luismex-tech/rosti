@@ -50,16 +50,6 @@
                 <div id="cart-items-container">
                     <p class="cart-empty-message">Tu carrito está vacío.</p>
                 </div>
-            </div>
-
-            <div class="cart-footer">
-                <div class="cart-summary">
-                    <div class="subtotal-line">
-                        <strong>Subtotal:</strong>
-                        <span id="subtotal-price">$0.00</span>
-                    </div>
-                </div>
-
                 <form id="customer-form" class="customer-form">
                     <h3>Completa tus datos</h3>
                     <div class="form-group">
@@ -81,11 +71,17 @@
                         <label for="customer-address">Tu Dirección:</label>
                         <textarea id="customer-address" placeholder="Calle, número, colonia y referencias" rows="3"></textarea>
                     </div>
-
-                    <button type="submit" id="send-order-button" class="btn-whatsapp" disabled>
-                        <i data-feather="send"></i> Enviar Pedido por WhatsApp
-                    </button>
                 </form>
+            </div>
+
+            <div class="cart-footer">
+                <div class="cart-summary">
+                    <span class="subtotal-label">Subtotal:</span>
+                    <span id="subtotal-price">$0.00</span>
+                </div>
+                <button type="submit" id="send-order-button" class="btn-whatsapp" form="customer-form" disabled>
+                    Enviar
+                </button>
             </div>
         </aside>
 
@@ -94,7 +90,6 @@
     <script src="menu.js"></script>
     <script src="app.js"></script>
     <script>
-        // Activa Feather Icons
         feather.replace();
     </script>
 </body>
