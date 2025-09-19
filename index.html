@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brasas Doradas - Rosticería Gourmet</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <header class="main-header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <img src="pngwing.com.png" alt="Logo Brasas Doradas"> <h1>Brasas Doradas</h1>
+            </a>
+            <div class="cart-button">
+                <i data-feather="shopping-cart"></i>
+                <span id="cart-counter" class="cart-counter">0</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section class="menu-section">
+            <h2>Nuestro Menú</h2>
+            <p class="subtitle">Elige tus platillos favoritos y arma tu pedido</p>
+            <div id="product-container" class="product-grid">
+                </div>
+        </section>
+
+        <aside class="cart-sidebar" id="cart-sidebar">
+            <div class="cart-header">
+                <h2>Tu Pedido</h2>
+                <button class="close-cart-btn" id="close-cart-btn">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="cart-content">
+                <div id="cart-items-container">
+                    <p class="cart-empty-message">Tu carrito está vacío.</p>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="subtotal-line">
+                        <strong>Subtotal:</strong>
+                        <span id="subtotal-price">$0.00</span>
+                    </div>
+                </div>
+
+                <form id="customer-form" class="customer-form">
+                    <h3>Completa tus datos</h3>
+                    <div class="form-group">
+                        <label for="customer-name">Tu Nombre:</label>
+                        <input type="text" id="customer-name" placeholder="Escribe tu nombre aquí" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Entrega:</label>
+                        <div class="radio-group">
+                            <input type="radio" id="pickup" name="delivery-type" value="pickup" checked>
+                            <label for="pickup">Recoger en Sucursal</label>
+                        </div>
+                        <div class="radio-group">
+                            <input type="radio" id="delivery" name="delivery-type" value="delivery">
+                            <label for="delivery">Entrega a Domicilio</label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="address-group" style="display: none;">
+                        <label for="customer-address">Tu Dirección:</label>
+                        <textarea id="customer-address" placeholder="Calle, número, colonia y referencias" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" id="send-order-button" class="btn-whatsapp" disabled>
+                        <i data-feather="send"></i> Enviar Pedido por WhatsApp
+                    </button>
+                </form>
+            </div>
+        </aside>
+    </main>
+
+    <script src="menu.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Activa Feather Icons
+        feather.replace();
+    </script>
+</body>
+</html>
