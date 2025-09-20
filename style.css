@@ -260,6 +260,11 @@ body.no-scroll {
 .cart-footer {
     flex-shrink: 0;
     padding: 1rem 1.5rem;
+    /* ======================= MODIFICACIÓN AQUÍ ======================= */
+    /* Se añade un padding inferior que respeta la barra de navegación del sistema */
+    /* '1rem' es nuestro padding base, y 'env(safe-area-inset-bottom)' es el espacio extra que necesita el teléfono */
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    /* ======================= FIN DE LA MODIFICACIÓN ======================= */
     border-top: 1px solid #eee;
     background-color: var(--card-bg);
     box-shadow: 0 -4px 10px rgba(0,0,0,0.08);
@@ -466,3 +471,4 @@ body.no-scroll {
         display: none;
     }
 }
+
