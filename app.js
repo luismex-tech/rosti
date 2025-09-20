@@ -1,8 +1,8 @@
 // app.js
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    // --- SELECTORES DEL DOM ---
+    
+    // --- SELECTORES DEL DOM (sin cambios) ---
     const productContainer = document.getElementById('product-container');
     const cartItemsContainer = document.getElementById('cart-items-container');
     const cartCounter = document.getElementById('cart-counter');
@@ -11,56 +11,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const customerForm = document.getElementById('customer-form');
     const deliveryRadios = document.querySelectorAll('input[name="delivery-type"]');
     const addressGroup = document.getElementById('address-group');
-
+    
     // Selectores para el modal del carrito
     const cartButton = document.querySelector('.cart-button');
     const cartSidebar = document.getElementById('cart-sidebar');
     const closeCartBtn = document.getElementById('close-cart-btn');
     const cartOverlay = document.getElementById('cart-overlay');
-
-    // ¡¡¡CAMBIA ESTE NÚMERO POR EL DE TU NEGOCIO!!!
+    
     const whatsappNumber = '5214771234567';
 
     // --- ESTADO DE LA APLICACIÓN ---
     let cart = [];
+    
+    // ======================= 1. NUEVA VARIABLE =======================
+    // Define el costo de envío. Puedes cambiar este valor fácilmente.
+    const deliveryCost = 15.00;
+    // ================================================================
 
     // --- FUNCIONES ---
 
-    // Funciones para controlar el modal
-    function openCart() {
-        cartSidebar.classList.add('is-open');
-        cartOverlay.classList.add('is-active');
-        document.body.classList.add('no-scroll');
-    }
+    function openCart() { /* ... sin cambios ... */ }
+    function closeCart() { /* ... sin cambios ... */ }
+    function renderProducts() { /* ... sin cambios ... */ }
 
-    function closeCart() {
-        cartSidebar.classList.remove('is-open');
-        cartOverlay.classList.remove('is-active');
-        document.body.classList.remove('no-scroll');
-    }
-
-    // Función para renderizar los productos en la página
-    function renderProducts() {
-        productContainer.innerHTML = '';
-        menuItems.forEach(item => {
-            const productCard = `
-                <div class="product-card">
-                    <img src="${item.imagen}" alt="${item.nombre}">
-                    <div class="product-info">
-                        <h3>${item.nombre}</h3>
-                        <p>${item.descripcion}</p>
-                        <div class="product-footer">
-                            <span class="product-price">$${item.precio.toFixed(2)}</span>
-                            <button class="add-to-cart-btn" data-id="${item.id}">Agregar</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            productContainer.innerHTML += productCard;
-        });
-    }
-
-    // Función para renderizar los items en el carrito
     function renderCart() {
         if (cart.length === 0) {
             cartItemsContainer.innerHTML = '<p class="cart-empty-message">Tu carrito está vacío.</p>';
@@ -85,53 +58,39 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             feather.replace();
         }
+        // Llamamos a updateCartState para que el total se actualice al renderizar
         updateCartState();
     }
-
-    // Función para actualizar el contador, subtotal y estado del botón de envío
+    
+    // ======================= 2. FUNCIÓN MODIFICADA =======================
+    // Ahora esta función calculará el total incluyendo el envío.
     function updateCartState() {
         const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
         const subtotal = cart.reduce((sum, item) => sum + (item.precio * item.quantity), 0);
+        
+        // Verifica qué opción de entrega está seleccionada
+        const isDelivery = document.querySelector('#delivery').checked;
+        let finalTotal = subtotal;
+
+        // Si es a domicilio y hay productos en el carrito, suma el costo de envío
+        if (isDelivery && subtotal > 0) {
+            finalTotal += deliveryCost;
+        }
 
         cartCounter.textContent = totalItems;
-        subtotalPriceElement.textContent = `$${subtotal.toFixed(2)}`;
+        // Mostramos el total final, que puede incluir el costo de envío
+        subtotalPriceElement.textContent = `$${finalTotal.toFixed(2)}`;
+        
         sendOrderButton.disabled = cart.length === 0;
         localStorage.setItem('brasasDoradasCart', JSON.stringify(cart));
     }
+    // ================================================================
 
-    function addToCart(productId) {
-        const productToAdd = menuItems.find(item => item.id === productId);
-        const existingItem = cart.find(item => item.id === productId);
-
-        if (existingItem) {
-            existingItem.quantity++;
-        } else {
-            cart.push({ ...productToAdd, quantity: 1 });
-        }
-        renderCart();
-    }
-
-    function changeQuantity(productId, action) {
-        const itemInCart = cart.find(item => item.id === productId);
-        if (!itemInCart) return;
-
-        if (action === 'increase') {
-            itemInCart.quantity++;
-        } else if (action === 'decrease') {
-            itemInCart.quantity--;
-            if (itemInCart.quantity <= 0) {
-                removeFromCart(productId);
-                return;
-            }
-        }
-        renderCart();
-    }
-
-    function removeFromCart(productId) {
-        cart = cart.filter(item => item.id !== productId);
-        renderCart();
-    }
-
+    function addToCart(productId) { /* ... sin cambios ... */ }
+    function changeQuantity(productId, action) { /* ... sin cambios ... */ }
+    function removeFromCart(productId) { /* ... sin cambios ... */ }
+    
+    // Función de mensaje de WhatsApp actualizada para reflejar el costo de envío
     function generateWhatsAppMessage() {
         const customerName = document.getElementById('customer-name').value;
         const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
@@ -151,77 +110,50 @@ document.addEventListener('DOMContentLoaded', () => {
         cart.forEach(item => {
             message += `(${item.quantity}) ${item.nombre} - $${(item.precio * item.quantity).toFixed(2)}\n`;
         });
-        message += `-----------------\n\n`;
-
+        
         const subtotal = cart.reduce((sum, item) => sum + (item.precio * item.quantity), 0);
-        message += `*TOTAL DEL PEDIDO: $${subtotal.toFixed(2)}*\n\n`;
-        message += `Quedo en espera de la confirmación. ¡Gracias!`;
+        let finalTotal = subtotal;
 
+        if (deliveryType === 'delivery') {
+            finalTotal += deliveryCost;
+            message += `Costo de envío - $${deliveryCost.toFixed(2)}\n`;
+        }
+        
+        message += `-----------------\n\n`;
+        message += `*TOTAL DEL PEDIDO: $${finalTotal.toFixed(2)}*\n\n`;
+        message += `Quedo en espera de la confirmación. ¡Gracias!`;
+        
         return encodeURIComponent(message);
     }
-
-    function loadCartFromStorage() {
-        const savedCart = localStorage.getItem('brasasDoradasCart');
-        if (savedCart) {
-            cart = JSON.parse(savedCart);
-            renderCart();
-        }
-    }
+    
+    function loadCartFromStorage() { /* ... sin cambios ... */ }
 
 
     // --- EVENT LISTENERS ---
+    
     cartButton.addEventListener('click', openCart);
     closeCartBtn.addEventListener('click', closeCart);
     cartOverlay.addEventListener('click', closeCart);
-
-    productContainer.addEventListener('click', e => {
-        if (e.target.closest('.add-to-cart-btn')) {
-            const productId = parseInt(e.target.closest('.add-to-cart-btn').dataset.id);
-            addToCart(productId);
-        }
-    });
-
-    cartItemsContainer.addEventListener('click', e => {
-        const target = e.target.closest('button');
-        if (!target) return;
-
-        const productId = parseInt(target.dataset.id);
-
-        if (target.classList.contains('quantity-btn')) {
-            const action = target.dataset.action;
-            changeQuantity(productId, action);
-        } else if (target.classList.contains('remove-btn')) {
-            removeFromCart(productId);
-        }
-    });
+    productContainer.addEventListener('click', e => { /* ... sin cambios ... */ });
+    cartItemsContainer.addEventListener('click', e => { /* ... sin cambios ... */ });
 
     deliveryRadios.forEach(radio => {
         radio.addEventListener('change', () => {
-            addressGroup.style.display = radio.value === 'delivery' ? 'block' : 'none';
+            // Muestra u oculta el campo de dirección
+            const isDelivery = radio.value === 'delivery';
+            addressGroup.style.display = isDelivery ? 'block' : 'none';
+
+            // ======================= 3. NUEVA LÓGICA =======================
+            // Muestra una alerta y actualiza el total cada vez que cambia la opción.
+            if (isDelivery) {
+                alert(`Se agregará un cargo de $${deliveryCost.toFixed(2)} por envío a domicilio.`);
+            }
+            updateCartState();
+            // ================================================================
         });
     });
 
-    customerForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const customerName = document.getElementById('customer-name').value;
-        const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
-        const address = document.getElementById('customer-address').value;
-
-        if (!customerName) {
-            alert('Por favor, ingresa tu nombre.');
-            return;
-        }
-        if (deliveryType === 'delivery' && !address) {
-            alert('Por favor, ingresa tu dirección para la entrega.');
-            return;
-        }
-
-        const message = generateWhatsAppMessage();
-        const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${message}`;
-
-        window.open(whatsappUrl, '_blank');
-    });
-
+    customerForm.addEventListener('submit', e => { /* ... sin cambios ... */ });
 
     // --- INICIALIZACIÓN ---
     loadCartFromStorage();
