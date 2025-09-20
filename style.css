@@ -259,10 +259,10 @@ body.no-scroll {
 
 .cart-footer {
     flex-shrink: 0;
-    padding: 1rem 1.5rem;
+    padding: 1rem 0.5rem;
     /* ======================= AJUSTE DIRECTO AQUÍ ======================= */
     /* Usamos un valor fijo y más grande para asegurar el espacio */
-    padding-bottom: 4.0rem; 
+    padding-bottom: 5.0rem; 
     /* ======================= FIN DEL AJUSTE ======================= */
     border-top: 1px solid #eee;
     background-color: var(--card-bg);
@@ -470,6 +470,7 @@ body.no-scroll {
         display: none;
     }
 }
+
 
 
 
